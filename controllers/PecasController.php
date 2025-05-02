@@ -131,4 +131,26 @@ class PecasController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionLoja()
+    {
+        $pecas = Pecas::find()->all();
+        return $this->render('loja', ['pecas' => $pecas]);
+    }
+
+    public function actionAddCarrinho($id)
+    {
+        $session = Yii::$app->session;
+        $carrinho = $session->get('carrinho', []);
+
+        if (isset($carrinho[$id])) {
+            $carrinho[$id]++;
+        } else {
+            $carrinho[$id] = 1;
+        }
+
+        $session->set('carrinho', $carrinho);
+
+        return $this->redirect(['pecas/loja']);
+    }
 }
